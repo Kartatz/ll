@@ -6,7 +6,7 @@ declare -r workdir="${PWD}"
 
 declare -r apt="${CC/clang/apt}"
 
-git clone https://github.com/minecraft-linux/mcpelauncher-manifest
+git clone https://github.com/minecraft-linux/mcpelauncher-manifest --recursive
 cd mcpelauncher-manifest
 
 bash $workdir/patches/apply_patches.sh
