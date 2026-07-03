@@ -54,6 +54,7 @@ jobs:
             tar --directory="$(dirname "${OBGGCC_TARBALL}")" --extract --file="${OBGGCC_TARBALL}"
             
             export OBGGCC_HOME='/tmp/obggcc'
+            export OBGGCC_NEON='true'
             export PATH="${OBGGCC_HOME}/bin:${PATH}"
             
             source "${OBGGCC_HOME}/build/autotools/clang/${{ matrix.target }}.sh"
