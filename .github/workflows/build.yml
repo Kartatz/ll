@@ -133,14 +133,7 @@ jobs:
         
         echo "CROSS_COMPILE_TRIPLET=${CROSS_COMPILE_TRIPLET}" >> "${GITHUB_ENV}"
         
-        cmake \
-            -DCMAKE_BUILD_TYPE='Release' \
-            -DCMAKE_INTERPROCEDURAL_OPTIMIZATION='ON' \
-            -S "${PWD}" \
-            -B "${PWD}/build"
-            
-        cmake --build "${PWD}/build" -- --jobs
-        cmake --install "${PWD}/build" --strip
+        bash build.sh
     - name: Generate tarball
       run: |
         if [[ '${{ env.CROSS_COMPILE_TRIPLET }}' = *'-mingw32' ]]; then
