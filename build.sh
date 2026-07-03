@@ -11,7 +11,7 @@ $workdir/patches/apply_patches.sh
 
 ${apt} install -y libpng-dev libevdev-dev libudev-dev libx11-dev libegl1-mesa-dev libxi-dev libxcursor-dev libxrandr-dev libxss-dev libgl-dev libssl-dev
 
-cmake -S . -B build -DCMAKE_INSTALL_PREFIX=/tmp/minecraft-linux
+cmake -S . -B build -DCMAKE_BUILD_TYPE='Release' -DCMAKE_INSTALL_PREFIX=/tmp/minecraft-linux
 make -C build
 make -C build install
 
