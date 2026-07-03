@@ -1,0 +1,27 @@
+From 841a46754c9655713fca42a935512004471a276b Mon Sep 17 00:00:00 2001
+From: Kartatz <105828205+Kartatz@users.noreply.github.com>
+Date: Fri, 3 Jul 2026 20:02:48 +0000
+Subject: [PATCH] Replace inline asm with
+ __builtin_frame_address/__builtin_return_address
+
+---
+ mcpelauncher-server/src/crash_handler.cpp | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/mcpelauncher-server/src/crash_handler.cpp b/mcpelauncher-server/src/crash_handler.cpp
+index 60f4d5f..2ae3be8 100644
+--- a/mcpelauncher-server/src/crash_handler.cpp
++++ b/mcpelauncher-server/src/crash_handler.cpp
+@@ -104,7 +104,8 @@ void _handleSignal(int signal, void *aptr) {
+     }
+     uint64_t fpval;
+     uint64_t retval;
+-    asm("mov %0, x29\nmov %1, x30":"=r"(fpval),"=r"(retval));
++    fpval = (uint64_t)__builtin_frame_address(0);
++    retval = (uint64_t)__builtin_return_address(0);
+     printf("Calling stack:\n");
+     while(1) {
+ 	    Dl_info symInfo;
+-- 
+2.54.0
+

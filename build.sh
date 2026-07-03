@@ -27,7 +27,7 @@ patch --directory="${PWD}" --strip='0' --input="${workdir}/patches/0002-libc-shi
 patch --directory="${PWD}/libc-shim" --strip='1' --input="${workdir}/patches/0012-libc-shim-fixes.patch"
 
 patch --directory="${PWD}/" --strip='1' --input="${workdir}/patches/0001-remove-stdlib-libcxx.patch"
-patch --directory="${PWD}/" --strip='1' --input="${workdir}/patches/0003-fix-x86-64-asm-in-crash-handler.patch"||true
+patch --directory="${PWD}/" --strip='1' --input="${workdir}/patches/0001-Replace-inline-asm-with-__builtin_frame_address-__bu.patch"
 patch --directory="${PWD}/" --strip='1' --input="${workdir}/patches/0002-add-missing-includes-main-h.patch"
 
 cmake -S . -B build -DBUILD_UI=OFF   -DBUILD_WEBVIEW=OFF   -DBUILD_CLIENT=ON   -DUSE_OWN_CURL=ON -DCMAKE_BUILD_TYPE='Release' -DCMAKE_INSTALL_PREFIX=/tmp/minecraft-linux
