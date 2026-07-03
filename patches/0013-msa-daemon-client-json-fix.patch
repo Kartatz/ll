@@ -1,0 +1,42 @@
+From 735e6e0340956decf48db7a8c6b70ac9c7a312fd Mon Sep 17 00:00:00 2001
+From: root
+ <root@runnervmkkn4f.n4ynvi3nwxeuxerw3ulirhhgtg.dx.internal.cloudapp.net>
+Date: Fri, 3 Jul 2026 15:30:46 +0000
+Subject: [PATCH] 0014-msa-daemon-client-json-fix
+
+---
+ include/msa/client/compact_token.h | 2 +-
+ include/msa/client/legacy_token.h  | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/include/msa/client/compact_token.h b/include/msa/client/compact_token.h
+index 0b62d18..0d40a2d 100644
+--- a/include/msa/client/compact_token.h
++++ b/include/msa/client/compact_token.h
+@@ -17,7 +17,7 @@ public:
+             Token(scope, create, expire), binaryToken(binaryToken) {}
+ 
+     CompactToken(nlohmann::json const& data) {
+-        binaryToken = data["binary_token"];
++        binaryToken = data["binary_token"].get<std::string>();
+     }
+ 
+     TokenType getType() const override { return TokenType::Compact; }
+diff --git a/include/msa/client/legacy_token.h b/include/msa/client/legacy_token.h
+index fcdd8de..b353b8a 100644
+--- a/include/msa/client/legacy_token.h
++++ b/include/msa/client/legacy_token.h
+@@ -18,8 +18,8 @@ public:
+                 std::string const& key) : Token(scope, create, expire), xmlData(xmlData), binarySecret(key) {}
+ 
+     LegacyToken(nlohmann::json const& data) : Token(data) {
+-        xmlData = data["xml_data"];
+-        binarySecret = data["binary_secret"];
++        xmlData = data["xml_data"].get<std::string>();
++        binarySecret = data["binary_secret"].get<std::string>();
+     }
+ 
+     TokenType getType() const override { return TokenType::Legacy; }
+-- 
+2.54.0
+

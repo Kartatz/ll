@@ -1,0 +1,51 @@
+From 9e0931bee9331b596ee35b6cf4de0f2f6ee05bfd Mon Sep 17 00:00:00 2001
+From: root
+ <root@runnervmkkn4f.n4ynvi3nwxeuxerw3ulirhhgtg.dx.internal.cloudapp.net>
+Date: Fri, 3 Jul 2026 15:37:56 +0000
+Subject: [PATCH] 0012-libc-shim-fixes
+
+---
+ src/common.cpp | 6 +++---
+ src/cstdio.cpp | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/src/common.cpp b/src/common.cpp
+index 8c1fb7d..c8df34d 100644
+--- a/src/common.cpp
++++ b/src/common.cpp
+@@ -889,7 +889,7 @@ void shim::add_string_shimmed_symbols(std::vector<shim::shimmed_symbol> &list) {
+         {"memmove", ::memmove},
+         {"__memmove_chk", __memmove_chk},
+         {"memset", ::memset},
+-        {"__memset_chk", ::__memset_chk},
++        shim::shimmed_symbol("__memset_chk", __memset_chk),
+         {"memmem", ::memmem},
+ #if LIBC_SHIM_DEFINE_VARIADIC
+         {"__vsprintf_chk", __vsprintf_chk},
+@@ -940,8 +940,8 @@ void shim::add_string_shimmed_symbols(std::vector<shim::shimmed_symbol> &list) {
+         {"bcopy", ::bcopy},
+         {"bzero", ::bzero},
+         {"ffs", ::ffs},
+-        {"index", ::index},
+-        {"rindex", ::rindex},
++        shim::shimmed_symbol("index", (char *(*)(char *, int))::index),
++        shim::shimmed_symbol("rindex", (char *(*)(char *, int))::rindex),
+         {"strcasecmp", ::strcasecmp},
+         {"strncasecmp", ::strncasecmp},
+     });
+diff --git a/src/cstdio.cpp b/src/cstdio.cpp
+index d72c30a..1e010a2 100644
+--- a/src/cstdio.cpp
++++ b/src/cstdio.cpp
+@@ -125,7 +125,7 @@ int shim::__vsnprintf_chk(char *dst, size_t in_len, int, size_t max_len, const c
+ int shim::__snprintf_chk(char *dst, size_t in_len, int flags, size_t max_len, const char *fmt, ...) {
+     va_list args;
+     va_start(args, fmt);
+-    int ret = ::__vsnprintf_chk(dst, in_len, flags, max_len, fmt, args);
++    int ret = __vsnprintf_chk(dst, in_len, flags, max_len, fmt, args);
+     va_end(args);
+     return ret;
+ }
+-- 
+2.54.0
+
