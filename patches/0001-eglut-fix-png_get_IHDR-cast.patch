@@ -1,0 +1,27 @@
+From 0ccb48399654f9a2bd405ee3f887b914bd06c0ed Mon Sep 17 00:00:00 2001
+From: root
+ <root@runnervmkkn4f.rpzyaon4tsbuzbyx4xvysldu2h.bx.internal.cloudapp.net>
+Date: Fri, 3 Jul 2026 02:15:56 +0000
+Subject: [PATCH] fix: cast width/height args to png_uint_32* in png_get_IHDR
+ call
+
+---
+ src/eglut.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git eglut/src/eglut.c eglut/src/eglut.c
+index fcf9f3e..1b56f55 100644
+--- eglut/src/eglut.c
++++ eglut/src/eglut.c
+@@ -384,7 +384,7 @@ _eglutReadPNG(const char *filename, unsigned int *width, unsigned int *height) {
+     png_init_io(png_ptr, file);
+     png_read_info(png_ptr, info_ptr);
+ 
+-    png_get_IHDR(png_ptr, info_ptr, width, height, &depth, &colorType, NULL, NULL, NULL);
++    png_get_IHDR(png_ptr, info_ptr, (png_uint_32 *) width, (png_uint_32 *) height, &depth, &colorType, NULL, NULL, NULL);
+ 
+     if (colorType == PNG_COLOR_TYPE_RGB) {
+         png_set_add_alpha(png_ptr, 0xff, PNG_FILLER_AFTER);
+-- 
+2.54.0
+

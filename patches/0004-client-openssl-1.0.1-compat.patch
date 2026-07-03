@@ -1,0 +1,94 @@
+From 734a20f0f0e5dec97174fe6fc800992b24e34044 Mon Sep 17 00:00:00 2001
+From: root
+ <root@runnervmkkn4f.rpzyaon4tsbuzbyx4xvysldu2h.bx.internal.cloudapp.net>
+Date: Fri, 3 Jul 2026 02:16:00 +0000
+Subject: [PATCH] fix: OpenSSL 1.0.1 compat shims and includes
+
+---
+ src/jni/ecdsa.cpp        |  1 +
+ src/jni/openssl_compat.h | 52 ++++++++++++++++++++++++++++++++++++++++
+ src/jni/shahasher.cpp    |  1 +
+ 3 files changed, 54 insertions(+)
+ create mode 100644 src/jni/openssl_compat.h
+
+diff --git mcpelauncher-client/src/jni/ecdsa.cpp mcpelauncher-client/src/jni/ecdsa.cpp
+index bd3ecc1..f06ba33 100644
+--- mcpelauncher-client/src/jni/ecdsa.cpp
++++ mcpelauncher-client/src/jni/ecdsa.cpp
+@@ -1,4 +1,5 @@
+ #include "ecdsa.h"
++#include "openssl_compat.h"
+ 
+ // TODO migrate to OPENSSL 3 API
+ 
+diff --git mcpelauncher-client/src/jni/openssl_compat.h mcpelauncher-client/src/jni/openssl_compat.h
+new file mode 100644
+index 0000000..ffcdfd1
+--- /dev/null
++++ mcpelauncher-client/src/jni/openssl_compat.h
+@@ -0,0 +1,52 @@
++#pragma once
++#include <openssl/opensslv.h>
++#include <openssl/evp.h>
++#include <openssl/ec.h>
++#include <openssl/ecdsa.h>
++#include <openssl/bn.h>
++
++#if OPENSSL_VERSION_NUMBER < 0x10100000L
++
++// OpenSSL 1.0.x compatibility shims
++
++static inline EVP_MD_CTX* EVP_MD_CTX_new() {
++    return EVP_MD_CTX_create();
++}
++static inline void EVP_MD_CTX_free(EVP_MD_CTX* ctx) {
++    EVP_MD_CTX_destroy(ctx);
++}
++
++static inline const BIGNUM* ECDSA_SIG_get0_r(const ECDSA_SIG* sig) {
++    return sig->r;
++}
++static inline const BIGNUM* ECDSA_SIG_get0_s(const ECDSA_SIG* sig) {
++    return sig->s;
++}
++
++static inline int EC_GROUP_order_bits(const EC_GROUP* group) {
++    BIGNUM* order = BN_new();
++    if (!order) return 0;
++    int ret = EC_GROUP_get_order(group, order, NULL);
++    if (!ret) { BN_free(order); return 0; }
++    int bits = BN_num_bits(order);
++    BN_free(order);
++    return bits;
++}
++
++static inline int EC_POINT_get_affine_coordinates(const EC_GROUP* group, const EC_POINT* p,
++                                                   BIGNUM* x, BIGNUM* y, BN_CTX* ctx) {
++    (void)ctx;
++    return EC_POINT_get_affine_coordinates_GFp(group, p, x, y, NULL);
++}
++
++static inline int BN_bn2binpad(const BIGNUM* a, unsigned char* to, int tolen) {
++    int len = BN_num_bytes(a);
++    if (len > tolen) return -1;
++    if (len < tolen) {
++        memset(to, 0, tolen - len);
++        to += tolen - len;
++    }
++    return BN_bn2bin(a, to) + (tolen - len);
++}
++
++#endif
+diff --git mcpelauncher-client/src/jni/shahasher.cpp mcpelauncher-client/src/jni/shahasher.cpp
+index a1c1761..9ef5969 100644
+--- mcpelauncher-client/src/jni/shahasher.cpp
++++ mcpelauncher-client/src/jni/shahasher.cpp
+@@ -1,4 +1,5 @@
+ #include "shahasher.h"
++#include "openssl_compat.h"
+ 
+ ShaHasher::ShaHasher() {
+     const EVP_MD* md = EVP_get_digestbynid(NID_sha256);
+-- 
+2.54.0
+

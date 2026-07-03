@@ -1,0 +1,38 @@
+From 9144c4f23a3e2093b0d7d48de28b217674d1f045 Mon Sep 17 00:00:00 2001
+From: root
+ <root@runnervmkkn4f.rpzyaon4tsbuzbyx4xvysldu2h.bx.internal.cloudapp.net>
+Date: Fri, 3 Jul 2026 02:15:59 +0000
+Subject: [PATCH] fix: add SYS_getrandom fallback for glibc < 2.25
+
+---
+ src/common.cpp | 14 ++++++++++++++
+ 1 file changed, 14 insertions(+)
+
+diff --git libc-shim/src/common.cpp libc-shim/src/common.cpp
+index 2ef6d95..8c1fb7d 100644
+--- libc-shim/src/common.cpp
++++ libc-shim/src/common.cpp
+@@ -438,6 +438,20 @@ int shim::gettid() {
+ #endif
+ }
+ 
++#ifndef SYS_getrandom
++#if defined(__x86_64__)
++#define SYS_getrandom 318
++#elif defined(__aarch64__)
++#define SYS_getrandom 278
++#elif defined(__arm__)
++#define SYS_getrandom 384
++#elif defined(__i386__)
++#define SYS_getrandom 355
++#else
++#error "SYS_getrandom not defined for this architecture"
++#endif
++#endif
++
+ ssize_t shim::getrandom(void *buf, size_t len, unsigned int flags) {
+ #ifdef __linux__
+         return (ssize_t)syscall(SYS_getrandom, buf, len, flags);
+-- 
+2.54.0
+

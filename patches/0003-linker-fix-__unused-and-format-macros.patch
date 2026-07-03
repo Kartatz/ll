@@ -1,0 +1,39 @@
+From a0a0ff7b2ea9c1c2977d9299ad43643c0dbeb197 Mon Sep 17 00:00:00 2001
+From: root
+ <root@runnervmkkn4f.rpzyaon4tsbuzbyx4xvysldu2h.bx.internal.cloudapp.net>
+Date: Fri, 3 Jul 2026 02:16:00 +0000
+Subject: [PATCH] fix: __unused macro fix and __STDC_FORMAT_MACROS for linker
+
+---
+ include/compat.h    | 1 +
+ include/sys/cdefs.h | 3 +++
+ 2 files changed, 4 insertions(+)
+
+diff --git mcpelauncher-linker/include/compat.h mcpelauncher-linker/include/compat.h
+index 1abf474..1e70b06 100644
+--- mcpelauncher-linker/include/compat.h
++++ mcpelauncher-linker/include/compat.h
+@@ -8,6 +8,7 @@
+ #define	__predict_true(exp)	__builtin_expect((exp) != 0, 1)
+ #define	__predict_false(exp)	__builtin_expect((exp) != 0, 0)
+ #include <features.h>
++#define __STDC_FORMAT_MACROS 1
+ #include <stdint.h>
+ #if defined(__GLIBC__) && (__GLIBC__ < 2 || __GLIBC__ == 2 && __GLIBC_MINOR__ < 30)
+ #include <unistd.h>
+diff --git mcpelauncher-linker/include/sys/cdefs.h mcpelauncher-linker/include/sys/cdefs.h
+index 939cf2d..66a4350 100644
+--- mcpelauncher-linker/include/sys/cdefs.h
++++ mcpelauncher-linker/include/sys/cdefs.h
+@@ -5,4 +5,7 @@
+ #include_next <sys/cdefs.h>
+ #ifdef __BIONIC__
+ #undef __BIONIC__
++#endif
++#ifndef __unused
++#define __unused __attribute__((__unused__))
+ #endif
+\ No newline at end of file
+-- 
+2.54.0
+
