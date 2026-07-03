@@ -31,7 +31,8 @@ patch --directory="${PWD}/" --strip='1' --input="${workdir}/patches/0001-Replace
 patch --directory="${PWD}/" --strip='1' --input="${workdir}/patches/0002-add-missing-includes-main-h.patch"
 patch --directory="${PWD}/" --strip='1' --input="${workdir}/patches/0001-Add-install-rules-for-binaries-and-libraries.patch"
 
-cmake -S . -B build -DBUILD_UI=OFF   -DBUILD_WEBVIEW=OFF   -DBUILD_CLIENT=ON   -DUSE_OWN_CURL=ON -DCMAKE_BUILD_TYPE='Release' -DCMAKE_INSTALL_PREFIX=/tmp/minecraft-linux
+cmake -S . -B build -DCMAKE_INSTALL_RPATH='$ORIGIN/../lib' -DCMAKE_BUILD_TYPE='Release' -DCMAKE_INSTALL_PREFIX=/tmp/minecraft-linux
 make -C build
 make -C build install
 
+cp --dereference $CROSS_COMPILE_SYSROOT/lib/nouzen/sysroot/lib/*/libpng12.so.0 /tmp/minecraft-linux/lib/libpng12.so.0
