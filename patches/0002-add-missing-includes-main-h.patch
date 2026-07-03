@@ -1,0 +1,24 @@
+From: opencode <opencode@example.com>
+Date: Fri Jul 3 04:00:00 2026
+Subject: [PATCH 2/4] Add missing includes to main.h
+
+main.h uses std::chrono, std::optional, std::shared_ptr etc.
+but didn't include the required headers.
+
+diff --git a/mcpelauncher-server/src/main.h b/mcpelauncher-server/src/main.h
+index dbad937..b16ad10 100644
+--- a/mcpelauncher-server/src/main.h
++++ b/mcpelauncher-server/src/main.h
+@@ -1,6 +1,12 @@
+ #pragma once
+ #include <string>
+ #include <unordered_map>
++#include <chrono>
++#include <optional>
++#include <memory>
++#include <functional>
++#include <cstdint>
++#include <cstring>
+ 
+ 
+ uintptr_t base;

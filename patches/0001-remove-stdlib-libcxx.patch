@@ -1,0 +1,32 @@
+From: opencode <opencode@example.com>
+Date: Fri Jul 3 04:00:00 2026
+Subject: [PATCH 1/4] Remove -stdlib=libc++ from CMakeLists
+
+Not needed when building with obggcc's libstdc++.
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 9682fda..0a37694 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -9,7 +9,7 @@ if(CMAKE_SIZEOF_VOID_P EQUAL 8)
+     set(IS_64BIT TRUE)
+ endif()
+ 
+-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fno-delete-null-pointer-checks -stdlib=libc++")
++set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fno-delete-null-pointer-checks")
+ 
+ set(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
+ 
+diff --git a/mcpelauncher-server/CMakeLists.txt b/mcpelauncher-server/CMakeLists.txt
+index 59be9d8..3c0085f 100644
+--- a/mcpelauncher-server/CMakeLists.txt
++++ b/mcpelauncher-server/CMakeLists.txt
+@@ -2,7 +2,7 @@ cmake_minimum_required (VERSION 3.6)
+ 
+ project(mcpelauncher-server LANGUAGES CXX ASM)
+ 
+-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -stdlib=libc++ -g")
++set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g")
+ 
+ add_executable(mcpelauncher-server src/main.cpp src/main.h src/console_reader.cpp src/stubs.cpp src/crash_handler.cpp)
+ target_link_libraries(mcpelauncher-server logger properties-parser mcpelauncher-core argparser android-support-headers libc-shim)
