@@ -133,8 +133,6 @@ jobs:
         
         echo "CROSS_COMPILE_TRIPLET=${CROSS_COMPILE_TRIPLET}" >> "${GITHUB_ENV}"
         
-        cd '/tmp'
-        
         wget 'https://apt.llvm.org/llvm.sh'
         sudo bash './llvm.sh' '22'
         
