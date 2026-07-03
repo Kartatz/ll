@@ -29,6 +29,7 @@ patch --directory="${PWD}/libc-shim" --strip='1' --input="${workdir}/patches/001
 patch --directory="${PWD}/" --strip='1' --input="${workdir}/patches/0001-remove-stdlib-libcxx.patch"
 patch --directory="${PWD}/" --strip='1' --input="${workdir}/patches/0001-Replace-inline-asm-with-__builtin_frame_address-__bu.patch"
 patch --directory="${PWD}/" --strip='1' --input="${workdir}/patches/0002-add-missing-includes-main-h.patch"
+patch --directory="${PWD}/" --strip='1' --input="${workdir}/patches/0001-Add-install-rules-for-binaries-and-libraries.patch"
 
 cmake -S . -B build -DBUILD_UI=OFF   -DBUILD_WEBVIEW=OFF   -DBUILD_CLIENT=ON   -DUSE_OWN_CURL=ON -DCMAKE_BUILD_TYPE='Release' -DCMAKE_INSTALL_PREFIX=/tmp/minecraft-linux
 make -C build

@@ -1,0 +1,26 @@
+From 982588930ec0119f5d3cb653484882736728587e Mon Sep 17 00:00:00 2001
+From: root
+ <root@runnervmkkn4f.ezo1goeqigjutp0txb4kr5b2ne.dx.internal.cloudapp.net>
+Date: Fri, 3 Jul 2026 20:17:26 +0000
+Subject: [PATCH] Add install() rules for binaries and libraries
+
+Add CMake install() commands to install the mcpelauncher-server binary
+to bin/ and shared libraries to lib/ under the install prefix.
+---
+ CMakeLists.txt | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 9682fda..96659c0 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -51,3 +51,6 @@ add_subdirectory(mcpelauncher-core)
+ add_subdirectory(android-support-headers)
+ add_subdirectory(mcpelauncher-server)
+ 
++install(TARGETS mcpelauncher-server RUNTIME DESTINATION bin)
++install(TARGETS logger file-util properties-parser arg-parser mcpelauncher-core libc-shim LIBRARY DESTINATION lib)
++
+-- 
+2.54.0
+
