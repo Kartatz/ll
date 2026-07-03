@@ -56,7 +56,7 @@ jobs:
             export OBGGCC_HOME='/tmp/obggcc'
             export PATH="${OBGGCC_HOME}/bin:${PATH}"
             
-            source "${OBGGCC_HOME}/build/autotools/${{ matrix.target }}.sh"
+            source "${OBGGCC_HOME}/build/autotools/clang/${{ matrix.target }}.sh"
         elif [[ '${{ matrix.target }}' = *'-freebsd' ]]; then
             declare -r LOKI_TARBALL='/tmp/toolchain.tar.xz'
             declare -r LOKI_URL="https://github.com/AmanoTeam/freebsd-gcc-cross/releases/latest/download/x86_64-unknown-linux-gnu.tar.xz"
