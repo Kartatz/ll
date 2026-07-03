@@ -35,4 +35,6 @@ cmake -S . -B build -DCMAKE_INSTALL_RPATH='$ORIGIN/../lib' -DCMAKE_BUILD_TYPE='R
 make -C build
 make -C build install
 
+mkdir /tmp/minecraft-linux/lib
+
 cp --dereference $CROSS_COMPILE_SYSROOT/lib/nouzen/sysroot/lib/*/libpng12.so.0 /tmp/minecraft-linux/lib/libpng12.so.0
