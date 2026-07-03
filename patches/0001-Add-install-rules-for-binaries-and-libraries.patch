@@ -19,7 +19,6 @@ index 9682fda..96659c0 100644
  add_subdirectory(mcpelauncher-server)
  
 +install(TARGETS mcpelauncher-server RUNTIME DESTINATION bin)
-+install(TARGETS logger file-util properties-parser arg-parser mcpelauncher-core libc-shim LIBRARY DESTINATION lib)
 +
 -- 
 2.54.0
