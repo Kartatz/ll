@@ -9,7 +9,11 @@ declare -r apt="${CC/clang/apt}"
 git clone https://github.com/minecraft-linux/mcpelauncher-manifest --recursive
 cd mcpelauncher-manifest
 
-bash $workdir/patches/apply_patches.sh
+patch --directory="${PWD}/eglut" --strip='1' --input="${workdir}/patches/0001-eglut-fix-png_get_IHDR-cast.patch"
+patch --directory="${PWD}/libc-shim" --strip='1' --input="${workdir}/patches/0002-libc-shim-add-SYS_getrandom-fallback.patch"
+patch --directory="${PWD}/mcpelauncher-linker" --strip='1' --input="${workdir}/patches/0003-linker-fix-__unused-and-format-macros.patch"
+patch --directory="${PWD}/mcpelauncher-client" --strip='1' --input="${workdir}/patches/0004-client-openssl-1.0.1-compat.patch"
+patch --directory="${PWD}" --strip='1' --input="${workdir}/patches/0005-root-add-global-__STDC_FORMAT_MACROS.patch"
 
 ${apt} install -y libpng-dev libevdev-dev libudev-dev libx11-dev libegl1-mesa-dev libxi-dev libxcursor-dev libxrandr-dev libxss-dev libgl-dev libssl-dev
 
