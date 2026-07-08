@@ -40,4 +40,4 @@ cmake -S . -B build -DCMAKE_INSTALL_RPATH='$ORIGIN/../lib' -DCMAKE_BUILD_TYPE='R
 make -C build
 make -C build install
 
-${APT} copy --outputdir /tmp/minecraft-linux/lib ${deps}
+${APT} copy ${deps} --outputdir /tmp/minecraft-linux/lib
