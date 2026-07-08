@@ -5,6 +5,8 @@ set -eu
 declare -r workdir="${PWD}"
 declare -r deps='libpng-dev libevdev-dev libudev-dev libx11-dev libegl1-mesa-dev libxi-dev libxcursor-dev libxrandr-dev libxss-dev libgl-dev libssl-dev'
 
+declare -r APT="${CC/clang/apt}"
+
 git clone https://github.com/minecraft-linux/mcpelauncher-manifest --recursive
 cd mcpelauncher-manifest
 
