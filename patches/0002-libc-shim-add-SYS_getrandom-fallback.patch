@@ -1,4 +1,4 @@
-From cdf5d0b781680c55e6f2fd088fef4f20afe9076c Mon Sep 17 00:00:00 2001
+From 88579b448f3d23eee2cd71890ec10984c6f04916 Mon Sep 17 00:00:00 2001
 From: root
  <root@runnervm5mmn9.f4gzbl3y3u1eff0aeziqr4glla.cx.internal.cloudapp.net>
 Date: Wed, 8 Jul 2026 21:01:02 +0000
@@ -10,7 +10,7 @@ Subject: [PATCH] fix: use /dev/urandom instead of SYS_getrandom for glibc <
  1 file changed, 5 insertions(+), 1 deletion(-)
 
 diff --git libc-shim/src/common.cpp libc-shim/src/common.cpp
-index 2ef6d95..64d0765 100644
+index 2ef6d95..c11c604 100644
 --- libc-shim/src/common.cpp
 +++ libc-shim/src/common.cpp
 @@ -440,7 +440,11 @@ int shim::gettid() {
@@ -18,7 +18,7 @@ index 2ef6d95..64d0765 100644
  ssize_t shim::getrandom(void *buf, size_t len, unsigned int flags) {
  #ifdef __linux__
 -        return (ssize_t)syscall(SYS_getrandom, buf, len, flags);
-+        int fd = open("/dev/urandom", 0);
++        int fd = ::open("/dev/urandom", 0);
 +        if (fd < 0) return -1;
 +        ssize_t ret = read(fd, buf, len);
 +        close(fd);
