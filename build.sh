@@ -6,6 +6,8 @@ declare -r prefix='/tmp/minecraft-linux'
 declare -r workdir="${PWD}"
 declare -r deps='libpng-dev libevdev-dev libudev-dev libx11-dev libegl1-mesa-dev libxi-dev libxcursor-dev libxrandr-dev libxss-dev libgl-dev libssl-dev'
 
+export CXXFLAGS='--enable-new-dtags'
+
 git clone https://github.com/minecraft-linux/mcpelauncher-manifest --recursive
 cd mcpelauncher-manifest
 
@@ -30,4 +32,4 @@ cmake \
 cmake --build 'build' -- --jobs
 cmake --install 'build' --strip
 
-"${APT}" copylibs ${deps} --outputdir "${prefix}"
+"${APT}" copylibs ${deps} --outputdir "${prefix}/lib"
