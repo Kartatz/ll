@@ -3,8 +3,7 @@
 set -eu
 
 declare -r workdir="${PWD}"
-
-declare -r apt="${CC/clang/apt}"
+declare -r deps='libpng-dev libevdev-dev libudev-dev libx11-dev libegl1-mesa-dev libxi-dev libxcursor-dev libxrandr-dev libxss-dev libgl-dev libssl-dev'
 
 git clone https://github.com/minecraft-linux/mcpelauncher-manifest --recursive
 cd mcpelauncher-manifest
@@ -15,7 +14,7 @@ patch --directory="${PWD}/libc-shim" --strip='1' --input="${workdir}/patches/000
 patch --directory="${PWD}/mcpelauncher-client" --strip='1' --input="${workdir}/patches/0004-client-openssl-1.0.1-compat.patch"
 patch --directory="${PWD}/libc-shim" --strip='1' --input="${workdir}/patches/0012-libc-shim-fixes.patch"
 
-${apt} install -y libpng-dev libevdev-dev libudev-dev libx11-dev libegl1-mesa-dev libxi-dev libxcursor-dev libxrandr-dev libxss-dev libgl-dev libssl-dev
+${APT} install -y ${deps}
 
 cmake -S . -B build -DBUILD_UI=OFF   -DBUILD_WEBVIEW=OFF   -DBUILD_CLIENT=ON   -DUSE_OWN_CURL=ON -DCMAKE_BUILD_TYPE='Release' -DCMAKE_INSTALL_PREFIX=/tmp/minecraft-linux
 make -C build
@@ -39,6 +38,4 @@ cmake -S . -B build -DCMAKE_INSTALL_RPATH='$ORIGIN/../lib' -DCMAKE_BUILD_TYPE='R
 make -C build
 make -C build install
 
-mkdir /tmp/minecraft-linux/lib
-
-cp --dereference $CROSS_COMPILE_SYSROOT/lib/nouzen/sysroot/lib/*/libpng12.so.0 /tmp/minecraft-linux/lib/libpng12.so.0
+${APT} copy --outputdir /tmp/minecraft-linux/lib ${deps}
